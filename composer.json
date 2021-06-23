@@ -1,5 +1,5 @@
 {
-  "name": "cyberclick/pinterest-php-sdk",
+  "name": "cyberclick-os/pinterest-php-sdk",
   "description": "PHP SDK for Pinterest Ads",
   "type": "library",
   "keywords": [
