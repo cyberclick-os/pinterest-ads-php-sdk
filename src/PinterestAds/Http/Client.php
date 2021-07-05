@@ -5,6 +5,7 @@ namespace PinterestAds\Http;
 use PinterestAds\ApiConfig;
 use PinterestAds\Http\Adapter\AdapterInterface;
 use PinterestAds\Http\Adapter\CurlAdapter;
+use PinterestAds\Http\Exception\RequestException;
 
 class Client
 {
@@ -97,11 +98,6 @@ class Client
         $this->caBundlePath = $path;
     }
 
-    /**
-     * @param RequestInterface $request
-     * @return ResponseInterface
-     * @throws RequestException
-     */
     public function sendRequest(RequestInterface $request): ResponseInterface {
         $response = $this->adapter()->sendRequest($request);
         $response->setRequest($request);

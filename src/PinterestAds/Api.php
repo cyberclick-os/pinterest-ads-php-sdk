@@ -2,7 +2,6 @@
 
 namespace PinterestAds;
 
-use PinterestAds\ApiConfig;
 use PinterestAds\Http\Client;
 use PinterestAds\Http\RequestInterface;
 use PinterestAds\Http\ResponseInterface;
@@ -10,9 +9,6 @@ use PinterestAds\Logger\LoggerInterface;
 
 class Api {
 
-    /**
-     * @var string
-     */
     const VERSION = ApiConfig::APIVersion;
 
     protected static Api $instance;
@@ -32,13 +28,10 @@ class Api {
         $this->session = $session;
     }
 
-    public static function init(string $app_id, string $app_secret, string $access_token, bool $log_crash=true) {
+    public static function init(string $app_id, string $app_secret, string $access_token) {
         $session = new Session($app_id, $app_secret, $access_token);
         $api = new static(new Client(), $session);
         static::setInstance($api);
-        if ($log_crash) {
-            //CrashReporter::enable();
-        }
         return $api;
     }
 
@@ -83,7 +76,7 @@ class Api {
             $params_ref->enhance($params);
         }
 
-        $params_ref->enhance($this->session()->getRequestParameters());
+        $params_ref->enhance($this->session()->requestParameters());
 
         return $request;
     }

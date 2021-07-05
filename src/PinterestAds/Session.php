@@ -44,7 +44,7 @@ class Session implements SessionInterface
         return $this->appSecretProof;
     }
 
-    public function getRequestParameters(): array
+    public function requestParameters(): array
     {
         if ($this->appSecretProof() !== null) {
             return array(

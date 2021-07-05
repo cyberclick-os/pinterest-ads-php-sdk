@@ -46,12 +46,12 @@ class CurlAdapter extends AbstractAdapter
         $this->opts = $opts;
     }
 
-    protected function getheaderSize(): int {
+    protected function headerSize(): int {
         return $this->curl()->info(CURLINFO_HEADER_SIZE);
     }
 
     protected function extractResponseHeadersAndBody(string $raw_response): array {
-        $header_size = $this->getheaderSize();
+        $header_size = $this->headerSize();
 
         $raw_headers = mb_substr($raw_response, 0, $header_size);
         $raw_body = mb_substr($raw_response, $header_size);

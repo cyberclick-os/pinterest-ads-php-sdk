@@ -31,50 +31,27 @@ use PinterestAds\Object\AbstractCrudObject;
 use PinterestAds\Object\AbstractObject;
 
 class Cursor implements \Iterator, \Countable, \arrayaccess {
-  /**
-   * @var ResponseInterface
-   */
-  protected $response;
 
-  /**
-   * @var Api
-   */
-  protected $api;
+  protected ResponseInterface $response;
+
+  protected Api $api;
 
   /**
    * @var AbstractObject[]
    */
-  protected $objects = array();
+  protected array $objects = array();
 
-  /**
-   * @var int|null
-   */
-  protected $indexLeft;
+  protected ?int $indexLeft;
 
-  /**
-   * @var int|null
-   */
-  protected $indexRight;
+  protected ?int $indexRight;
 
-  /**
-   * @var int|null
-   */
-  protected $position;
+  protected ?int $position;
 
-  /**
-   * @var AbstractObject
-   */
-  protected $objectPrototype;
+  protected AbstractObject $objectPrototype;
 
-  /**
-   * @var bool
-   */
-  protected static $defaultUseImplicitFetch = false;
+  protected static bool $defaultUseImplicitFetch = false;
 
-  /**
-   * @var bool
-   */
-  protected $useImplicitFetch;
+  protected bool $useImplicitFetch;
 
   public function __construct(
     ResponseInterface $response,
@@ -86,11 +63,7 @@ class Cursor implements \Iterator, \Countable, \arrayaccess {
     $this->appendResponse($response);
   }
 
-  /**
-   * @param array $object_data
-   * @return AbstractObject
-   */
-  protected function createObject(array $object_data) {
+  protected function createObject(array $object_data):AbstractObject {
     $object = clone $this->objectPrototype;
     $object->setDataWithoutValidation($object_data);
     if ($object instanceof AbstractCrudObject) {
@@ -99,12 +72,7 @@ class Cursor implements \Iterator, \Countable, \arrayaccess {
     return $object;
   }
 
-  /**
-   * @param ResponseInterface $response
-   * @return array
-   * @throws \InvalidArgumentException
-   */
-  protected function assureResponseData(ResponseInterface $response) {
+  protected function assureResponseData(ResponseInterface $response): array {
     $content = $response->content();
 
     // First, check if the content contains data
@@ -159,7 +127,7 @@ class Cursor implements \Iterator, \Countable, \arrayaccess {
     throw new \InvalidArgumentException("Malformed response data");
   }
 
-  private function isJsonObject($object) {
+  private function isJsonObject($object): bool {
     if (!is_array($object)) {
       return false;
     }
@@ -173,9 +141,6 @@ class Cursor implements \Iterator, \Countable, \arrayaccess {
     return array_keys($object) !== range(0, count($object) - 1);
   }
 
-  /**
-   * @param ResponseInterface $response
-   */
   protected function prependResponse(ResponseInterface $response) {
     $this->response = $response;
     $data = $this->assureResponseData($response);
@@ -192,9 +157,6 @@ class Cursor implements \Iterator, \Countable, \arrayaccess {
     }
   }
 
-  /**
-   * @param ResponseInterface $response
-   */
   protected function appendResponse(ResponseInterface $response) {
     $this->response = $response;
     $data = $this->assureResponseData($response);
@@ -215,61 +177,40 @@ class Cursor implements \Iterator, \Countable, \arrayaccess {
     }
   }
 
-  /**
-   * @return bool
-   */
-  public static function getDefaultUseImplicitFetch() {
+  public static function defaultUseImplicitFetch(): bool {
     return static::$defaultUseImplicitFetch;
   }
 
-  /**
-   * @param bool $use_implicit_fetch
-   */
-  public static function setDefaultUseImplicitFetch($use_implicit_fetch) {
+  public static function setDefaultUseImplicitFetch(bool $use_implicit_fetch) {
     static::$defaultUseImplicitFetch = $use_implicit_fetch;
   }
 
-  /**
-   * @return bool
-   */
-  public function getUseImplicitFetch() {
+  public function useImplicitFetch(): bool {
     return $this->useImplicitFetch !== null
       ? $this->useImplicitFetch
       : static::$defaultUseImplicitFetch;
   }
 
-  /**
-   * @param bool $use_implicit_fetch
-   */
-  public function setUseImplicitFetch($use_implicit_fetch) {
+  public function setUseImplicitFetch(bool $use_implicit_fetch) {
     $this->useImplicitFetch = $use_implicit_fetch;
   }
 
-  /**
-   * @return string|null
-   */
-  public function getBefore() {
-    $content = $this->getLastResponse()->content();
+  public function before(): ?string {
+    $content = $this->lastResponse()->content();
     return isset($content['paging']['cursors']['before'])
       ? $content['paging']['cursors']['before']
       : null;
   }
 
-  /**
-   * @return string|null
-   */
-  public function getAfter() {
-    $content = $this->getLastResponse()->content();
+  public function after(): ?string {
+    $content = $this->lastResponse()->content();
     return isset($content['paging']['cursors']['after'])
       ? $content['paging']['cursors']['after']
       : null;
   }
 
-  /**
-   * @return RequestInterface
-   */
-  protected function createUndirectionalizedRequest() {
-    $request = $this->getLastResponse()->request()->createClone();
+  protected function createUndirectionalizedRequest(): RequestInterface {
+    $request = $this->lastResponse()->request()->createClone();
     $params = $request->queryParams();
     if (isset($params['before'])) {
       unset($params['before']);
@@ -281,16 +222,13 @@ class Cursor implements \Iterator, \Countable, \arrayaccess {
     return $request;
   }
 
-  /**
-   * @return string|null
-   */
-  public function getPrevious() {
-    $content = $this->getLastResponse()->content();
+  public function getPrevious(): ?string {
+    $content = $this->lastResponse()->content();
     if (isset($content['paging']['previous'])) {
       return $content['paging']['previous'];
     }
 
-    $before = $this->getBefore();
+    $before = $this->before();
     if ($before !== null) {
       $request = $this->createUndirectionalizedRequest();
       $request->queryParams()->offsetSet('before', $before);
@@ -300,16 +238,13 @@ class Cursor implements \Iterator, \Countable, \arrayaccess {
     return null;
   }
 
-  /**
-   * @return string|null
-   */
-  public function getNext() {
-    $content = $this->getLastResponse()->content();
+  public function getNext(): ?string {
+    $content = $this->lastResponse()->content();
     if (isset($content['paging']['next'])) {
       return $content['paging']['next'];
     }
 
-    $after = $this->getAfter();
+    $after = $this->after();
     if ($after !== null) {
       $request = $this->createUndirectionalizedRequest();
       $request->queryParams()->offsetSet('after', $after);
@@ -319,13 +254,9 @@ class Cursor implements \Iterator, \Countable, \arrayaccess {
     return null;
   }
 
-  /**
-   * @param string $url
-   * @return RequestInterface
-   */
-  protected function createRequestFromUrl($url) {
+  protected function createRequestFromUrl(string $url): RequestInterface {
     $components = parse_url($url);
-    $request = $this->getLastResponse()->request()->createClone();
+    $request = $this->lastResponse()->request()->createClone();
     $request->setDomain($components['host']);
     $query = isset($components['query'])
       ? Util::parseUrlQuery($components['query'])
@@ -335,18 +266,12 @@ class Cursor implements \Iterator, \Countable, \arrayaccess {
     return $request;
   }
 
-  /**
-   * @return RequestInterface|null
-   */
-  public function createBeforeRequest() {
+  public function createBeforeRequest(): ?RequestInterface {
     $url = $this->getPrevious();
     return $url !== null ? $this->createRequestFromUrl($url) : null;
   }
 
-  /**
-   * @return RequestInterface|null
-   */
-  public function createAfterRequest() {
+  public function createAfterRequest(): ?RequestInterface {
     $url = $this->getNext();
     return $url !== null ? $this->createRequestFromUrl($url) : null;
   }
@@ -373,7 +298,7 @@ class Cursor implements \Iterator, \Countable, \arrayaccess {
    * @deprecated Use getArrayCopy()
    * @return AbstractObject[]
    */
-  public function getObjects() {
+  public function getObjects(): array {
     return $this->objects;
   }
 
@@ -391,32 +316,19 @@ class Cursor implements \Iterator, \Countable, \arrayaccess {
     return $this->objects;
   }
 
-  /**
-   * @deprecated Use getLastResponse()
-   * @return ResponseInterface
-   */
-  public function getResponse() {
+  public function response(): ResponseInterface {
     return $this->response;
   }
 
-  /**
-   * @return ResponseInterface
-   */
-  public function getLastResponse() {
+  public function lastResponse(): ResponseInterface {
     return $this->response;
   }
 
-  /**
-   * @return int
-   */
-  public function getIndexLeft() {
+  public function indexLeft(): int {
     return $this->indexLeft;
   }
 
-  /**
-   * @return int
-   */
-  public function getIndexRight() {
+  public function indexRight():int {
     return $this->indexRight;
   }
 
@@ -428,35 +340,26 @@ class Cursor implements \Iterator, \Countable, \arrayaccess {
     $this->position = $this->indexRight;
   }
 
-  /**
-   * @param int $position
-   */
-  public function seekTo($position) {
+  public function seekTo(int $position) {
     $position = array_key_exists($position, $this->objects) ? $position : null;
     $this->position = $position;
   }
 
-  /**
-   * @return AbstractObject|bool
-   */
-  public function current() {
+  public function current(): AbstractObject|bool {
     return isset($this->objects[$this->position])
       ? $this->objects[$this->position]
       : false;
   }
 
-  /**
-   * @return int
-   */
-  public function key() {
+  public function key():int {
     return $this->position;
   }
 
   public function prev() {
-    if ($this->position == $this->getIndexLeft()) {
-      if ($this->getUseImplicitFetch()) {
+    if ($this->position == $this->indexLeft()) {
+      if ($this->useImplicitFetch()) {
         $this->fetchBefore();
-        if ($this->position == $this->getIndexLeft()) {
+        if ($this->position == $this->indexLeft()) {
           $this->position = null;
         } else {
           --$this->position;
@@ -470,10 +373,10 @@ class Cursor implements \Iterator, \Countable, \arrayaccess {
   }
 
   public function next() {
-    if ($this->position == $this->getIndexRight()) {
-      if ($this->getUseImplicitFetch()) {
+    if ($this->position == $this->indexRight()) {
+      if ($this->useImplicitFetch()) {
         $this->fetchAfter();
-        if ($this->position == $this->getIndexRight()) {
+        if ($this->position == $this->indexRight()) {
           $this->position = null;
         } else {
           ++$this->position;
@@ -486,24 +389,14 @@ class Cursor implements \Iterator, \Countable, \arrayaccess {
     }
   }
 
-  /**
-   * @return bool
-   */
-  public function valid() {
+  public function valid():bool {
     return isset($this->objects[$this->position]);
   }
 
-  /**
-   * @return int
-   */
-  public function count() {
+  public function count():int {
     return count($this->objects);
   }
 
-  /**
-   * @param mixed $offset
-   * @param mixed $value
-   */
   public function offsetSet($offset, $value) {
     if ($offset === null) {
       $this->objects[] = $value;
@@ -512,25 +405,14 @@ class Cursor implements \Iterator, \Countable, \arrayaccess {
     }
   }
 
-  /**
-   * @param mixed $offset
-   * @return bool
-   */
-  public function offsetExists($offset) {
+  public function offsetExists($offset):bool {
     return isset($this->objects[$offset]);
   }
 
-  /**
-   * @param mixed $offset
-   */
   public function offsetUnset($offset) {
     unset($this->objects[$offset]);
   }
 
-  /**
-   * @param mixed $offset
-   * @return mixed
-   */
   public function offsetGet($offset) {
     return isset($this->objects[$offset]) ? $this->objects[$offset] : null;
   }

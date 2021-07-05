@@ -4,5 +4,5 @@ namespace PinterestAds;
 
 interface SessionInterface
 {
-    public function getRequestParameters(): array;
+    public function requestParameters(): array;
 }

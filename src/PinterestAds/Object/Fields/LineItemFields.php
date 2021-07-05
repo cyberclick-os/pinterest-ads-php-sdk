@@ -1,10 +1,10 @@
 <?php
 
-
 namespace PinterestAds\Object\Fields;
 
+use PinterestAds\Enum\AbstractEnum;
 
-class LineItemFields extends \PinterestAds\Enum\AbstractEnum
+class LineItemFields extends AbstractEnum
 {
     const PRODUCT_BRAND = 'product_brand';
     const PRODUCT_CATEGORY = 'product_category';

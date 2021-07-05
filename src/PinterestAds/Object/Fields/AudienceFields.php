@@ -1,14 +1,11 @@
 <?php
 
-
 namespace PinterestAds\Object\Fields;
-
 
 use PinterestAds\Enum\AbstractEnum;
 
 class AudienceFields extends AbstractEnum
 {
-
     const ADVERTISER_ID = 'advertiser_id';
     const AUDIENCE_INSIGHTS_STATUS = 'audience_insights_status';
     const AUDIENCE_TYPE = 'audience_type';
@@ -32,7 +29,7 @@ class AudienceFields extends AbstractEnum
             'description' => 'string',
             'id' => 'string',
             'name' => 'string',
-            'rule' => 'Object',
+            'rule' => 'Rule',
             'size' => 'int',
             'status' => 'string',
             'type' => 'string',

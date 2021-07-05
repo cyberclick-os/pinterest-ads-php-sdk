@@ -27,9 +27,6 @@ abstract class AbstractCurl implements CurlInterface
         }
     }
 
-    /**
-     * @return resource
-     */
     public function handle() {
         return $this->handle;
     }
@@ -58,11 +55,6 @@ abstract class AbstractCurl implements CurlInterface
         curl_setopt_array($this->handle, $opts);
     }
 
-    /**
-     * @param int $option
-     * @param mixed $value
-     * @return bool
-     */
     public function setOpt(int $option, $value): bool {
         return curl_setopt($this->handle, $option, $value);
     }
