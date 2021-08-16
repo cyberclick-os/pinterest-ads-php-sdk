@@ -3,6 +3,7 @@
 namespace PinterestAds\Object;
 
 use PinterestAds\ApiRequest;
+use PinterestAds\Enum\AbstractEnum;
 use PinterestAds\Http\RequestInterface;
 use PinterestAds\Object\Fields\CampaignFields;
 use PinterestAds\TypeChecker;
@@ -13,8 +14,9 @@ class Campaign extends AbstractArchivableCrudObject
         return "campaigns";
     }
 
-    public static function getFieldsEnum(){
-        return CampaignFields::getInstance();
+    public static function getFieldsEnum(): AbstractEnum
+    {
+        return CampaignFields::instance();
     }
 
     public function getSelf(array $fields = array(), array $params = array(), $pending = false) {
@@ -30,7 +32,7 @@ class Campaign extends AbstractArchivableCrudObject
             '/campaigns/'.$this->data['id'],
             new Campaign(),
             'NODE',
-            Campaign::getFieldsEnum()->getValues(),
+            Campaign::getFieldsEnum()->values(),
             new TypeChecker($param_types, $enums)
         );
         $request->addParams($params);
@@ -55,7 +57,7 @@ class Campaign extends AbstractArchivableCrudObject
             '/campaigns/'.$this->data['id'].'/ad_groups',
             new Campaign(),
             'EDGE',
-            Campaign::getFieldsEnum()->getValues(),
+            Campaign::getFieldsEnum()->values(),
             new TypeChecker($param_types, $enums)
         );
         $request->addParams($params);

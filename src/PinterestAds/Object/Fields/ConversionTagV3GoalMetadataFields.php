@@ -4,7 +4,9 @@
 namespace PinterestAds\Object\Fields;
 
 
-class ConversionTagV3GoalMetadataFields extends \PinterestAds\Enum\AbstractEnum
+use PinterestAds\Enum\AbstractEnum;
+
+class ConversionTagV3GoalMetadataFields extends AbstractEnum
 {
     const ATTRIBUTIONWINDOWS = 'attributionWindows';
     const CONVERSIONEVENT = 'conversionEvent';

@@ -24,21 +24,22 @@
 
 namespace PinterestAds;
 
+use ArrayAccess;
+use Countable;
+use InvalidArgumentException;
+use Iterator;
 use PinterestAds\Http\RequestInterface;
 use PinterestAds\Http\ResponseInterface;
 use PinterestAds\Http\Util;
 use PinterestAds\Object\AbstractCrudObject;
 use PinterestAds\Object\AbstractObject;
 
-class Cursor implements \Iterator, \Countable, \arrayaccess {
+class Cursor implements Iterator, Countable, arrayaccess {
 
   protected ResponseInterface $response;
 
   protected Api $api;
 
-  /**
-   * @var AbstractObject[]
-   */
   protected array $objects = array();
 
   protected ?int $indexLeft;
@@ -124,7 +125,7 @@ class Cursor implements \Iterator, \Countable, \arrayaccess {
       return $objects;
     }
 
-    throw new \InvalidArgumentException("Malformed response data");
+    throw new InvalidArgumentException("Malformed response data");
   }
 
   private function isJsonObject($object): bool {
@@ -164,7 +165,7 @@ class Cursor implements \Iterator, \Countable, \arrayaccess {
       return;
     }
 
-    if ($this->indexRight === null) {
+    if (!isset($this->indexRight)) {
       $this->indexLeft = 0;
       $this->indexRight = -1;
       $this->position = 0;
@@ -222,7 +223,7 @@ class Cursor implements \Iterator, \Countable, \arrayaccess {
     return $request;
   }
 
-  public function getPrevious(): ?string {
+  public function previous(): ?string {
     $content = $this->lastResponse()->content();
     if (isset($content['paging']['previous'])) {
       return $content['paging']['previous'];
@@ -267,7 +268,7 @@ class Cursor implements \Iterator, \Countable, \arrayaccess {
   }
 
   public function createBeforeRequest(): ?RequestInterface {
-    $url = $this->getPrevious();
+    $url = $this->previous();
     return $url !== null ? $this->createRequestFromUrl($url) : null;
   }
 
@@ -294,19 +295,7 @@ class Cursor implements \Iterator, \Countable, \arrayaccess {
     $this->appendResponse($request->execute());
   }
 
-  /**
-   * @deprecated Use getArrayCopy()
-   * @return AbstractObject[]
-   */
-  public function getObjects(): array {
-    return $this->objects;
-  }
-
-  /**
-   * @param bool $ksort
-   * @return AbstractObject[]
-   */
-  public function getArrayCopy($ksort = false) {
+  public function getArrayCopy(bool $ksort = false): array {
     if ($ksort) {
       // Sort the main array to improve best case performance in future
       // invocations

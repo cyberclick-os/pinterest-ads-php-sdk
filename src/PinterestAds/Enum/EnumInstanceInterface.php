@@ -26,66 +26,25 @@ namespace PinterestAds\Enum;
 
 interface EnumInstanceInterface {
 
-  /**
-   * @return EnumInstanceInterface
-   */
-  public static function getInstance();
+  public static function instance(): EnumInstanceInterface;
 
-  /**
-   * @return array
-   */
-  public function getArrayCopy();
+  public function arrayCopy(): array;
 
-  /**
-   * @return array
-   */
-  public function getNames();
+  public function names(): array;
 
-  /**
-   * @return array
-   */
-  public function getValues();
+  public function values(): array;
 
-  /**
-   * @return array
-   */
-  public function getValuesMap();
+  public function valuesMap(): array;
 
-  /**
-   * @param string|int|float $name
-   * @return mixed
-   */
-  public function getValueForName($name);
+  public function getValueForName(string|int|float $name);
 
-  /**
-   * @param string|int|float $name
-   * @return mixed
-   * @throws \InvalidArgumentException
-   */
-  public function assureValueForName($name);
+  public function assureValueForName(string|int|float $name);
 
-  /**
-   * @param string|int|float $name
-   * @return bool
-   */
-  public function isValid($name);
+  public function isValid( string|int|float $name): bool;
 
-  /**
-   * @param string|int|float $name
-   * @return void
-   * @throws \InvalidArgumentException
-   */
-  public function assureIsValid($name);
+  public function assureIsValid(string|int|float $name): void;
 
-  /**
-   * @param mixed $value
-   * @return bool
-   */
-  public function isValidValue($value);
+  public function isValidValue($value): bool;
 
-  /**
-   * @param mixed $value
-   * @throws \InvalidArgumentException
-   */
   public function assureIsValidValue($value);
 }

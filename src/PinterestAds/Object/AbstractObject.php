@@ -1,41 +1,20 @@
 <?php
-/**
- * Copyright (c) 2014-present, Facebook, Inc. All rights reserved.
- *
- * You are hereby granted a non-exclusive, worldwide, royalty-free license to
- * use, copy, modify, and distribute this software in source code or binary
- * form for use in connection with the web services and APIs provided by
- * Facebook.
- *
- * As with any software that integrates with the Facebook platform, your use
- * of this software is subject to the Facebook Developer Principles and
- * Policies [http://developers.facebook.com/policy/]. This copyright notice
- * shall be included in all copies or substantial portions of the software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
- * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
- * DEALINGS IN THE SOFTWARE.
- *
- */
+
 namespace PinterestAds\Object;
 
+use InvalidArgumentException;
 use PinterestAds\ApiConfig;
+use PinterestAds\Enum\AbstractEnum;
 use PinterestAds\TypeChecker;
 use PinterestAds\Enum\EmptyEnum;
 
 class AbstractObject {
-  /**
-   * @var mixed[] set of key value pairs representing data
-   */
-  protected $data = array();
+
+  protected array $data = array();
   protected $_type_checker;
 
   public function __construct() {
-    $this->data = static::getFieldsEnum()->getValuesMap();
+    $this->data = static::getFieldsEnum()->valuesMap();
     $this->_type_checker = new TypeChecker(
       static::getFieldTypes(), static::getReferencedEnums());
   }
@@ -53,18 +32,14 @@ class AbstractObject {
     return array();
   }
 
-  /**
-   * @param string $name
-   * @param mixed $value
-   */
-  public function __set($name, $value) {
+  public function __set(string $name, $value) {
     if (ApiConfig::TYPE_CHECKER_STRICT_MODE
       && $this->_type_checker->isValidParam($name)
     ) {
       if ($this->_type_checker->isValidParamPair($name, $value)) {
         $this->data[$name] = $value;
       } else {
-        throw new \InvalidArgumentException(
+        throw new InvalidArgumentException(
           $name." and ".$this->exportValue($value)
           ." are not a valid type value pair");
       }
@@ -74,30 +49,19 @@ class AbstractObject {
     return $this;
   }
 
-  /**
-   * @param string $name
-   * @return mixed
-   * @throws \InvalidArgumentException
-   */
-  public function __get($name) {
+  public function __get(string $name) {
     if (array_key_exists($name, $this->data)) {
       return $this->data[$name];
     } else {
-      throw new \InvalidArgumentException(
+      throw new InvalidArgumentException(
         $name.' is not a field of '.get_class($this));
     }
   }
-  /**
-   * @param string $name
-   * @return boolean
-   */
-  public function __isset($name) {
+
+  public function __isset(string $name): bool {
     return array_key_exists($name, $this->data);
   }
-  /**
-   * @param array
-   * @return $this
-   */
+
   public function setData(array $data) {
     foreach ($data as $key => $value) {
       $this->{$key} = $value;
@@ -109,12 +73,7 @@ class AbstractObject {
 
     return $this;
   }
-  /**
-   * Like setData but will skip field validation
-   *
-   * @param array
-   * @return $this
-   */
+
   public function setDataWithoutValidation(array $data) {
     foreach ($data as $key => $value) {
       $this->data[$key] = $value;
@@ -125,16 +84,11 @@ class AbstractObject {
     }
     return $this;
   }
-  /**
-   * @return array
-   */
-  public function data() {
+
+  public function data(): array {
     return $this->data;
   }
-  /**
-   * @param mixed $value
-   * @return mixed
-   */
+
   protected function exportValue($value) {
     $result = $value;
     switch (true) {
@@ -154,34 +108,24 @@ class AbstractObject {
     }
     return $result;
   }
-  /**
-   * @return array
-   */
-  public function exportData() {
+
+  public function exportData(): array {
     return $this->exportValue($this->data);
   }
-  /**
-   * @return array
-   */
-  public function exportAllData() {
+
+  public function exportAllData():array {
     return $this->exportValue($this->data);
   }
-  /**
-   * @return EmptyEnum
-   */
-  public static function getFieldsEnum() {
-    return EmptyEnum::getInstance();
+
+  public static function getFieldsEnum(): AbstractEnum {
+    return EmptyEnum::instance();
   }
-  /**
-   * @return array
-   */
-  public static function fields() {
-    return static::getFieldsEnum()->getValues();
+
+  public static function fields(): array {
+    return static::getFieldsEnum()->values();
   }
-  /**
-   * @return string
-   */
-  public static function className() {
+
+  public static function className(): string {
     return get_called_class();
   }
 }

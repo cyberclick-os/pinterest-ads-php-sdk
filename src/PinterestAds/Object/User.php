@@ -24,7 +24,7 @@ class User extends AbstractCrudObject
             '/advertisers',
             new Advertiser(),
             'EDGE',
-            Advertiser::getFieldsEnum()->getValues(),
+            Advertiser::getFieldsEnum()->values(),
             new TypeChecker($param_types, $enums)
         );
         $request->addParams($params);

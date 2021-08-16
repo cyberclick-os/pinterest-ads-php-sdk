@@ -24,6 +24,7 @@
 
 namespace PinterestAds;
 
+use LogicException;
 use PinterestAds\Api;
 use PinterestAds\ApiConfig;
 use PinterestAds\Cursor;
@@ -95,7 +96,7 @@ class ApiRequest {
         $this->params[$param] = $this->param_checker->convertStringToPrimType(
           $param_type, $value);
       } else {
-        throw new \LogicException('The value for '.$param.' is not compatible');
+        throw new LogicException('The value for '.$param.' is not compatible');
       }
     }
     return $this;
@@ -124,15 +125,14 @@ class ApiRequest {
   }
 
   public function getParams() {
-    $all_params = array_merge($this->params, $this->file_params);
-    return $all_params;
+      return array_merge($this->params, $this->file_params);
   }
 
   public function addField($field) {
     if (ApiConfig::TYPE_CHECKER_STRICT_MODE
       && !in_array($field, $this->accepted_fields)
     ) {
-      throw new \LogicException('Field '.$field.' is not supported');
+      throw new LogicException('Field '.$field.' is not supported');
     }
     if (!(in_array($field, $this->fields))) {
       $this->fields[] = $field;
@@ -166,7 +166,7 @@ class ApiRequest {
 
   public function addFile($filename) {
     if (ApiConfig::TYPE_CHECKER_STRICT_MODE && !$this->allow_file_upload) {
-      throw new \LogicException("This api cannot upload files");
+      throw new LogicException("This api cannot upload files");
     }
     $file_key = 'source'.$this->file_counter;
     if (file_exists($filename)) {

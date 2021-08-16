@@ -35,6 +35,8 @@ class RequestException extends Exception {
 
         parent::__construct($error_data['message'], $error_data['code']);
 
+        echo $response->body();
+
         $this->errorSubcode = $error_data['error_subcode'];
         $this->errorUserTitle = $error_data['error_user_title'];
         $this->errorUserMessage = $error_data['error_user_msg'];

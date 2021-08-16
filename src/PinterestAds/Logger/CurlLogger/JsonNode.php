@@ -25,6 +25,7 @@
 namespace PinterestAds\Logger\CurlLogger;
 
 use ArrayObject;
+use InvalidArgumentException;
 
 final class JsonNode {
 
@@ -36,11 +37,7 @@ final class JsonNode {
   protected $value;
   protected ArrayObject $children;
 
-  /**
-   * @param mixed $value
-   * @return $this
-   * @throws \InvalidArgumentException
-   */
+
   public static function factory($value): JsonNode {
     $object = new self();
     switch (true) {
@@ -56,7 +53,7 @@ final class JsonNode {
         $object->setValue($value);
         break;
       default:
-        throw new \InvalidArgumentException(
+        throw new InvalidArgumentException(
           gettype($value).' can\'t be encoded');
     }
 

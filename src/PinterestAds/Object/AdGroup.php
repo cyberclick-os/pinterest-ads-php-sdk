@@ -3,6 +3,7 @@
 namespace PinterestAds\Object;
 
 use PinterestAds\ApiRequest;
+use PinterestAds\Enum\AbstractEnum;
 use PinterestAds\Http\RequestInterface;
 use PinterestAds\Object\Fields\AdGroupFields;
 use PinterestAds\Object\Values\OrderValues;
@@ -15,8 +16,8 @@ class AdGroup extends AbstractArchivableCrudObject
         return "ad_groups";
     }
 
-    public static function getFieldsEnum(){
-        return AdGroupFields::getInstance();
+    public static function getFieldsEnum(): AbstractEnum{
+        return AdGroupFields::instance();
     }
 
     public function getSelf(array $fields = array(), array $params = array(), $pending = false) {
@@ -33,7 +34,7 @@ class AdGroup extends AbstractArchivableCrudObject
             '/ad_groups/'.$this->data['id'],
             new AdGroup(),
             'NODE',
-            AdGroup::getFieldsEnum()->getValues(),
+            AdGroup::getFieldsEnum()->values(),
             new TypeChecker($param_types, $enums)
         );
         $request->addParams($params);
@@ -49,8 +50,8 @@ class AdGroup extends AbstractArchivableCrudObject
             'bookmark' => 'string'
         );
         $enums = array(
-            'order_enum' => OrderValues::getInstance()->getValues(),
-            'pin_promotion_status_enum' => StatusValues::getInstance()->getValues()
+            'order_enum' => OrderValues::instance()->values(),
+            'pin_promotion_status_enum' => StatusValues::instance()->values()
         );
 
         $request = new ApiRequest(
@@ -60,7 +61,7 @@ class AdGroup extends AbstractArchivableCrudObject
             '/ad_groups/'.$this->data['id'].'/pin_promotions',
             new PinPromotion(),
             'EDGE',
-            PinPromotion::getFieldsEnum()->getValues(),
+            PinPromotion::getFieldsEnum()->values(),
             new TypeChecker($param_types, $enums)
         );
         $request->addParams($params);

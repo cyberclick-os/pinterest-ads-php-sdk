@@ -1,67 +1,24 @@
 <?php
-/**
- * Copyright (c) 2014-present, Facebook, Inc. All rights reserved.
- *
- * You are hereby granted a non-exclusive, worldwide, royalty-free license to
- * use, copy, modify, and distribute this software in source code or binary
- * form for use in connection with the web services and APIs provided by
- * Facebook.
- *
- * As with any software that integrates with the Facebook platform, your use
- * of this software is subject to the Facebook Developer Principles and
- * Policies [http://developers.facebook.com/policy/]. This copyright notice
- * shall be included in all copies or substantial portions of the software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
- * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
- * DEALINGS IN THE SOFTWARE.
- *
- */
 
 namespace PinterestAds\Enum;
 
+use InvalidArgumentException;
+use ReflectionClass;
+
 abstract class AbstractEnum implements EnumInstanceInterface {
 
-  /**
-   * @var array|null
-   */
-  protected $map = null;
+  protected ?array $map = null;
+  protected ?array $names = null;
+  protected ?array$values = null;
+  protected ?array $valuesMap = null;
 
-  /**
-   * @var array|null
-   */
-  protected $names = null;
+  protected static array $instances = array();
 
-  /**
-   * @var array|null
-   */
-  protected $values = null;
-
-  /**
-   * @var array|null
-   */
-  protected $valuesMap = null;
-
-  /**
-   * @var AbstractEnum[]
-   */
-  protected static $instances = array();
-
-  /**
-   * @return string
-   */
-  static function className() {
+  static function className(): string {
     return get_called_class();
   }
 
-  /**
-   * @return AbstractEnum
-   */
-  public static function getInstance() {
+  public static function instance(): AbstractEnum {
     $fqn = get_called_class();
     if (!array_key_exists($fqn, static::$instances)) {
       static::$instances[$fqn] = new static();
@@ -70,111 +27,74 @@ abstract class AbstractEnum implements EnumInstanceInterface {
     return static::$instances[$fqn];
   }
 
-  /**
-   * @return array
-   */
-  public function getArrayCopy() {
+  public function arrayCopy(): array {
     if ($this->map === null) {
-      $this->map = (new \ReflectionClass(get_called_class()))
+      $this->map = (new ReflectionClass(get_called_class()))
         ->getConstants();
     }
 
     return $this->map;
   }
 
-  /**
-   * @return array
-   */
-  public function getNames() {
+  public function names(): array {
     if ($this->names === null) {
-      $this->names = array_keys($this->getArrayCopy());
+      $this->names = array_keys($this->arrayCopy());
     }
 
     return $this->names;
   }
 
-  /**
-   * @return array
-   */
-  public function getValues() {
+  public function values(): array {
     if ($this->values === null) {
-      $this->values = array_values($this->getArrayCopy());
+      $this->values = array_values($this->arrayCopy());
     }
 
     return $this->values;
   }
 
-  /**
-   * @return array
-   */
-  public function getValuesMap() {
+  public function valuesMap(): array {
     if ($this->valuesMap === null) {
-      $this->valuesMap = array_fill_keys($this->getValues(), null);
+      $this->valuesMap = array_fill_keys($this->values(), null);
     }
 
     return $this->valuesMap;
   }
 
-  /**
-   * @param string|int|float $name
-   * @return mixed
-   */
-  public function getValueForName($name) {
-    $copy = $this->getArrayCopy();
+  public function getValueForName(string|int|float $name) {
+    $copy = $this->arrayCopy();
     return array_key_exists($name, $copy)
       ? $copy[$name]
       : null;
   }
 
-  /**
-   * @param string|int|float $name
-   * @return mixed
-   * @throws \InvalidArgumentException
-   */
-  public function assureValueForName($name) {
+  public function assureValueForName(string|int|float $name) {
     $value = $this->getValueForName($name);
     if ($value === null) {
-      throw new \InvalidArgumentException(
+      throw new InvalidArgumentException(
         'Unknown name "'.$name.'" in '.static::className());
     }
 
     return $value;
   }
 
-  /**
-   * @param string|int|float $name
-   * @return bool
-   */
-  public function isValid($name) {
-    return array_key_exists($name, $this->getArrayCopy());
+  public function isValid(string|int|float $name): bool {
+    return array_key_exists($name, $this->arrayCopy());
   }
 
-  /**
-   * @param string|int|float $name
-   * @throws \InvalidArgumentException
-   */
-  public function assureIsValid($name) {
-    if (!array_key_exists($name, $this->getArrayCopy())) {
-      throw new \InvalidArgumentException(
+  public function assureIsValid(string|int|float $name): void {
+    if (!array_key_exists($name, $this->arrayCopy())) {
+      throw new InvalidArgumentException(
         'Unknown name "'.$name.'" in '.static::className());
     }
   }
 
-  /**
-   * @param string|int|float $value
-   * @return bool
-   */
-  public function isValidValue($value) {
-    return array_key_exists($value, $this->getValuesMap());
+  public function isValidValue($value): bool {
+    return array_key_exists($value, $this->valuesMap());
   }
 
-  /**
-   * @param mixed $value
-   * @throws \InvalidArgumentException
-   */
   public function assureIsValidValue($value) {
     if (!$this->isValidValue($value)) {
-      throw new \InvalidArgumentException(
+      throw new InvalidArgumentException(
         '"'.$value.'", not a valid value in '.static::className());
     }
   }

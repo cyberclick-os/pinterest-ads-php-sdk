@@ -3,6 +3,7 @@
 namespace PinterestAds\Object;
 
 use PinterestAds\ApiRequest;
+use PinterestAds\Enum\AbstractEnum;
 use PinterestAds\Http\RequestInterface;
 use PinterestAds\Object\Fields\AdvertiserFields;
 use PinterestAds\Object\Values\EntityFieldsValues;
@@ -23,8 +24,9 @@ class Advertiser extends AbstractArchivableCrudObject
         return "advertisers";
     }
 
-    public static function getFieldsEnum(){
-        return AdvertiserFields::getInstance();
+    public static function getFieldsEnum(): AbstractEnum
+    {
+        return AdvertiserFields::instance();
     }
 
     public function getCampaigns(array $fields = array(), array $params = array(), $pending = false) {
@@ -45,7 +47,7 @@ class Advertiser extends AbstractArchivableCrudObject
             '/advertisers/'.$this->data['id'].'/campaigns',
             new Campaign(),
             'EDGE',
-            Campaign::getFieldsEnum()->getValues(),
+            Campaign::getFieldsEnum()->values(),
             new TypeChecker($param_types, $enums)
         );
         $request->addParams($params);
@@ -67,7 +69,7 @@ class Advertiser extends AbstractArchivableCrudObject
             '/advertisers/'.$this->data['id'].'/insights/audience/'.$scope.'/'.$type,
             new Audience(),
             'EDGE',
-            Audience::getFieldsEnum()->getValues(),
+            Audience::getFieldsEnum()->values(),
             new TypeChecker($param_types, $enums)
         );
         $request->addParams(array());
@@ -93,15 +95,15 @@ class Advertiser extends AbstractArchivableCrudObject
             'view_window_days' => 'window_days_enum'
         );
         $enums = array(
-            'window_days_enum' => WindowDaysValues::getInstance()->getValues(),
-            'conversion_report_time_enum' => ConversionReportTimeValues::getInstance()->getValues(),
-            'data_source_enum' => DataSourceValues::getInstance()->getValues(),
-            'entity_fields_enum' => EntityFieldsValues::getInstance()->getValues(),
-            'granularity_enum' => GranularityValues::getInstance()->getValues(),
-            'level_enum' => LevelValues::getInstance()->getValues(),
-            'metrics_enum' => MetricsValues::getInstance()->getValues(),
-            'report_format_enum' => ReportFormatValues::getInstance()->getValues(),
-            'tag_version_enum' => TagVersionValues::getInstance()->getValues()
+            'window_days_enum' => WindowDaysValues::instance()->values(),
+            'conversion_report_time_enum' => ConversionReportTimeValues::instance()->values(),
+            'data_source_enum' => DataSourceValues::instance()->values(),
+            'entity_fields_enum' => EntityFieldsValues::instance()->values(),
+            'granularity_enum' => GranularityValues::instance()->values(),
+            'level_enum' => LevelValues::instance()->values(),
+            'metrics_enum' => MetricsValues::instance()->values(),
+            'report_format_enum' => ReportFormatValues::instance()->values(),
+            'tag_version_enum' => TagVersionValues::instance()->values()
         );
 
         $request = new ApiRequest(
@@ -111,7 +113,7 @@ class Advertiser extends AbstractArchivableCrudObject
             '/reports/async/'.$this->data['id'].'/delivery_metrics',
             new RequestAsyncAdvertiserDeliveryMetricsReportResponse(),
             'EDGE',
-            RequestAsyncAdvertiserDeliveryMetricsReportResponse::getFieldsEnum()->getValues(),
+            RequestAsyncAdvertiserDeliveryMetricsReportResponse::getFieldsEnum()->values(),
             new TypeChecker($param_types, $enums)
         );
         $request->addParams($params);
@@ -133,7 +135,7 @@ class Advertiser extends AbstractArchivableCrudObject
             '/reports/async/'.$this->data['id'].'/delivery_metrics',
             new GetAsyncAdvertiserDeliveryMetricsReportResponse(),
             'EDGE',
-            GetAsyncAdvertiserDeliveryMetricsReportResponse::getFieldsEnum()->getValues(),
+            GetAsyncAdvertiserDeliveryMetricsReportResponse::getFieldsEnum()->values(),
             new TypeChecker($param_types, $enums)
         );
         $request->addParams($params);

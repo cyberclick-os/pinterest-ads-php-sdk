@@ -1,5 +1,6 @@
 <?php
 
+namespace PinterestAds\Object\Values;
 
 use PinterestAds\Enum\AbstractEnum;
 

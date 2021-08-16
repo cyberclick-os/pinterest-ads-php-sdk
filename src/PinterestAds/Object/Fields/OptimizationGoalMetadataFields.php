@@ -4,7 +4,9 @@
 namespace PinterestAds\Object\Fields;
 
 
-class OptimizationGoalMetadataFields extends \PinterestAds\Enum\AbstractEnum
+use PinterestAds\Enum\AbstractEnum;
+
+class OptimizationGoalMetadataFields extends AbstractEnum
 {
     const CONVERSIONTAGV3GOALMETADATA = 'conversionTagV3GoalMetadata';
     const FREQUENCYGOALMETADATA = 'frequencyGoalMetadata';

@@ -2,12 +2,13 @@
 
 namespace PinterestAds\Object;
 
+use PinterestAds\Enum\AbstractEnum;
 use PinterestAds\Object\Fields\OptimizationGoalMetadataFields;
 
 class OptimizationGoalMetadata extends AbstractObject
 {
-    public static function getFieldsEnum()
+    public static function getFieldsEnum(): AbstractEnum
     {
-        return OptimizationGoalMetadataFields::getInstance();
+        return OptimizationGoalMetadataFields::instance();
     }
 }

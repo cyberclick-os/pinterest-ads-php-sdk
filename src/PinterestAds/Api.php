@@ -6,6 +6,7 @@ use PinterestAds\Http\Client;
 use PinterestAds\Http\RequestInterface;
 use PinterestAds\Http\ResponseInterface;
 use PinterestAds\Logger\LoggerInterface;
+use PinterestAds\Logger\NullLogger;
 
 class Api {
 
@@ -96,7 +97,7 @@ class Api {
 
     public function logger(): LoggerInterface
     {
-        if ($this->logger === null) {
+        if (!isset($this->logger)) {
             $this->logger = new NullLogger();
         }
         return $this->logger;

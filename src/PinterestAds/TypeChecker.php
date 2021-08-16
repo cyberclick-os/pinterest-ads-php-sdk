@@ -24,6 +24,9 @@
 
 namespace PinterestAds;
 
+
+use Exception;
+
 class TypeChecker {
 
   const ABSTRACT_OBJECT_PREFIX = "PinterestAds\\Object\\";
@@ -59,7 +62,7 @@ class TypeChecker {
       return $value;
     } else {
       if (ApiConfig::TYPE_CHECKER_STRICT_MODE) {
-        throw new \Exception("Not a primitive type");
+        throw new Exception("Not a primitive type");
       } else {
         return $value;
       }
