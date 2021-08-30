@@ -55,9 +55,8 @@ class CurlAdapter extends AbstractAdapter
 
         $raw_headers = mb_substr($raw_response, 0, $header_size);
         $raw_body = mb_substr($raw_response, $header_size);
-        $body = json_encode(json_decode($raw_body, true)['data']);
 
-        return array(trim($raw_headers), trim($body));
+        return array(trim($raw_headers), trim($raw_body));
     }
 
     protected function parseHeaders(Headers $headers, string $raw_headers) {

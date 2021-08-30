@@ -171,7 +171,8 @@ class ApiRequest {
     } else if ($this->method === "DELETE") {
       return $response;
     } else {
-      return $this->createObject($response->content());
+        $content = json_decode($response->body(), true)['data'];
+        return $this->createObject($content);
     }
   }
 
