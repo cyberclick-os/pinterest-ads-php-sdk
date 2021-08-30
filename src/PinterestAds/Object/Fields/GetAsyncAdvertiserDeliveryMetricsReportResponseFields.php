@@ -6,11 +6,13 @@ use PinterestAds\Enum\AbstractEnum;
 
 class GetAsyncAdvertiserDeliveryMetricsReportResponseFields extends AbstractEnum
 {
-    const DATA = 'data';
+    const REPORT_STATUS = 'report_status';
+    const URL = 'url';
 
     public function fieldTypes(): array{
         return array(
-            'data' => 'string'
+            'report_status' => 'string',
+            'url' => 'string'
         );
     }
 }

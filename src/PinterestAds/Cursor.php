@@ -145,9 +145,6 @@ class Cursor implements Iterator, Countable, arrayaccess {
   protected function prependResponse(ResponseInterface $response) {
     $this->response = $response;
     $data = $this->assureResponseData($response);
-    if (empty($data)) {
-      return;
-    }
 
     $left_index = $this->indexLeft;
     $count = count($data);
@@ -187,7 +184,7 @@ class Cursor implements Iterator, Countable, arrayaccess {
   }
 
   public function useImplicitFetch(): bool {
-    return $this->useImplicitFetch !== null
+    return isset($this->useImplicitFetch)
       ? $this->useImplicitFetch
       : static::$defaultUseImplicitFetch;
   }

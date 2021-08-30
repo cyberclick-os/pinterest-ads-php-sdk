@@ -91,6 +91,7 @@ class Advertiser extends AbstractArchivableCrudObject
             'level' => 'level_enum',
             'metrics' => 'metrics_enum',
             'report_format' => 'report_format_enum',
+            'start_date' => 'string',
             'tag_version' => 'tag_version_enum',
             'view_window_days' => 'window_days_enum'
         );
@@ -112,7 +113,7 @@ class Advertiser extends AbstractArchivableCrudObject
             RequestInterface::METHOD_POST,
             '/reports/async/'.$this->data['id'].'/delivery_metrics',
             new RequestAsyncAdvertiserDeliveryMetricsReportResponse(),
-            'EDGE',
+            'NODE',
             RequestAsyncAdvertiserDeliveryMetricsReportResponse::getFieldsEnum()->values(),
             new TypeChecker($param_types, $enums)
         );
@@ -134,7 +135,7 @@ class Advertiser extends AbstractArchivableCrudObject
             RequestInterface::METHOD_GET,
             '/reports/async/'.$this->data['id'].'/delivery_metrics',
             new GetAsyncAdvertiserDeliveryMetricsReportResponse(),
-            'EDGE',
+            'NODE',
             GetAsyncAdvertiserDeliveryMetricsReportResponse::getFieldsEnum()->values(),
             new TypeChecker($param_types, $enums)
         );

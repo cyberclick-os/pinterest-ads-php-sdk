@@ -18,7 +18,7 @@ class AbstractCrudObject extends AbstractObject {
 
   protected Api $api;
 
-  protected string $parentId;
+  protected ?string $parentId;
 
   /**
    * @deprecated deprecate constructor with null and parent_id
