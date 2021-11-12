@@ -158,9 +158,6 @@ class Cursor implements Iterator, Countable, arrayaccess {
   protected function appendResponse(ResponseInterface $response) {
     $this->response = $response;
     $data = $this->assureResponseData($response);
-    if (empty($data)) {
-      return;
-    }
 
     if (!isset($this->indexRight)) {
       $this->indexLeft = 0;
@@ -319,7 +316,7 @@ class Cursor implements Iterator, Countable, arrayaccess {
   }
 
   public function rewind() {
-    $this->position = $this->indexLeft;
+    if(isset($this->indexLeft)) $this->position = $this->indexLeft;
   }
 
   public function end() {

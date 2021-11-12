@@ -55,9 +55,9 @@ class Campaign extends AbstractArchivableCrudObject
             $this->data['id'],
             RequestInterface::METHOD_GET,
             '/campaigns/'.$this->data['id'].'/ad_groups',
-            new Campaign(),
+            new AdGroup(),
             'EDGE',
-            Campaign::getFieldsEnum()->values(),
+            AdGroup::getFieldsEnum()->values(),
             new TypeChecker($param_types, $enums)
         );
         $request->addParams($params);
