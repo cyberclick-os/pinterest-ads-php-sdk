@@ -90,10 +90,8 @@ class ApiRequest {
   public function removeParam($param) {
     if (array_key_exists($param, $this->params)) {
       unset($this->params[$param]);
-    } elseif (array_key_exists($param, $this->params)) {
-      unset($this->file_params[$param]);
     }
-    return $this;
+      return $this;
   }
 
   public function clearParams() {
@@ -108,11 +106,11 @@ class ApiRequest {
 
   public function addField($field) {
     if (ApiConfig::TYPE_CHECKER_STRICT_MODE
-      && !in_array($field, $this->accepted_fields)
+      && !in_array($field, $this->accepted_fields, true)
     ) {
       throw new LogicException('Field '.$field.' is not supported');
     }
-    if (!(in_array($field, $this->fields))) {
+    if (!(in_array($field, $this->fields, true))) {
       $this->fields[] = $field;
     }
     return $this;
@@ -126,8 +124,8 @@ class ApiRequest {
   }
 
   public function removeField($field) {
-    if (in_array($field, $this->fields)) {
-      $index_to_remove = array_search($field, $this->fields);
+    if (in_array($field, $this->fields, true)) {
+      $index_to_remove = array_search($field, $this->fields, true);
       unset($this->fields[$index_to_remove]);
     }
     return $this;
@@ -171,7 +169,7 @@ class ApiRequest {
     } else if ($this->method === "DELETE") {
       return $response;
     } else {
-        $content = json_decode($response->body(), true)['data'];
+        $content = json_decode($response->body(), true, 512, JSON_THROW_ON_ERROR)['data'];
         return $this->createObject($content);
     }
   }

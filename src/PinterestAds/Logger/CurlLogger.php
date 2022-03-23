@@ -74,7 +74,7 @@ class CurlLogger implements LoggerInterface {
   public static function getParamFlag(string $method, string $value): string {
     return $method === RequestInterface::METHOD_POST
       ? static::PARAM_POST_FLAG
-      : (strstr($value, "\n")
+      : (str_contains($value, "\n")
         ? static::PARAM_URLENCODE_FLAG
         : static::PARAM_DEFAULT_FLAG);
   }
@@ -100,7 +100,7 @@ class CurlLogger implements LoggerInterface {
       }
       $chunks[$name] = sprintf(
         '-%s \'%s=%s\'',
-        $this->getParamFlag($method, $value),
+        self::getParamFlag($method, $value),
         $name,
         $value);
     }
@@ -110,9 +110,9 @@ class CurlLogger implements LoggerInterface {
   protected function normalizeFileParam(FileParameter $file_param): string {
     return sprintf('%s%s%s%s%s',
       $file_param->path(),
-      $file_param->mimeType() != null ? ";type=" : "",
+      $file_param->mimeType() !== null ? ";type=" : "",
       $file_param->mimeType(),
-      $file_param->name() != null ? ";name=" : "",
+      $file_param->name() !== null ? ";name=" : "",
       $file_param->name());
   }
 
@@ -134,9 +134,8 @@ class CurlLogger implements LoggerInterface {
       $value = $array[$key];
       unset($array[$key]);
       return $value;
-    } else {
-      return null;
     }
+      return null;
   }
 
   protected function sortParams(array $params): array {

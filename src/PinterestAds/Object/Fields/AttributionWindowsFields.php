@@ -6,9 +6,9 @@ use PinterestAds\Enum\AbstractEnum;
 
 class AttributionWindowsFields extends AbstractEnum
 {
-    const CLICKWINDOWDAYS = 'clickWindowDays';
-    const ENGAGEMENTWINDOWDAYS = 'engagementWindowDays';
-    const VIEWWINDOWDAYS = 'viewWindowDays';
+    const CLICKWINDOWDAYS = 'click_window_days';
+    const ENGAGEMENTWINDOWDAYS = 'engagement_window_days';
+    const VIEWWINDOWDAYS = 'view_window_days';
 
     public function fieldTypes(): array{
         return array(

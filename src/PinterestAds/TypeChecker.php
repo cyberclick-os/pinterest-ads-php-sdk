@@ -49,11 +49,11 @@ class TypeChecker {
     if (array_key_exists($primitive_type, $this->enum_data)) {
       return $value;
     } elseif (in_array($primitive_type, array("unsigned int", "int"))) {
-      return intval($value);
+      return (int)$value;
     } elseif ($primitive_type === "bool") {
-      return boolval($value);
+      return (bool)$value;
     } elseif ($primitive_type === "float") {
-      return floatval($value);
+      return (float)$value;
     } elseif ($primitive_type === "datetime") {
       return $value;
     } elseif ($primitive_type === "string") {
@@ -93,7 +93,7 @@ class TypeChecker {
     if ($value === null || $type === null || $type === "Object") {
       return true;
     } else if (array_key_exists($type, $this->enum_data)) {
-      return in_array($value, $this->enum_data[$type]);
+      return in_array($value, $this->enum_data[$type], true);
     } else if ($type === "file") {
       return file_exists($value);
     } else if ($type === "list" || $type === "map") {

@@ -105,7 +105,10 @@ final class JsonNode {
     return key($copy);
   }
 
-  protected function encodeList(int $indent): string {
+    /**
+     * @throws \JsonException
+     */
+    protected function encodeList(int $indent): string {
     $value = $this->value();
     if (empty($value) || (array_keys($value) === range(0, count($value) - 1))) {
       $is_map = false;
@@ -123,7 +126,7 @@ final class JsonNode {
       $buffer .= sprintf(
         "%s%s%s%s\n",
         $this->padding($indent),
-        $is_map ? sprintf("%s: ", json_encode($key)) : '',
+        $is_map ? sprintf("%s: ", json_encode($key, JSON_THROW_ON_ERROR)) : '',
         $child->encode($indent),
         $key === $last_key ? '' : ',');
     }
@@ -134,14 +137,17 @@ final class JsonNode {
     return $buffer;
   }
 
-  public function encode(int $indent = 0): string {
+    /**
+     * @throws \JsonException
+     */
+    public function encode(int $indent = 0): string {
     $value = $this->value();
     if (is_array($value) || is_object($value)) {
       if ($this->maxTreeChildrenCount() > 2) {
         return $this->encodeList($indent);
       }
 
-      $ugly = json_encode($value);
+      $ugly = json_encode($value, JSON_THROW_ON_ERROR);
       $output_prediction = $this->padding($indent).$ugly;
       if (strlen($output_prediction) > self::EXPLOSION_THRESHOLD) {
         return $this->encodeList($indent);
@@ -150,6 +156,6 @@ final class JsonNode {
       return $ugly;
     }
 
-    return json_encode($value);
+    return json_encode($value, JSON_THROW_ON_ERROR);
   }
 }

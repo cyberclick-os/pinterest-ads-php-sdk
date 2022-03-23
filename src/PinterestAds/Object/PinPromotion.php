@@ -1,8 +1,6 @@
 <?php
 
-
 namespace PinterestAds\Object;
-
 
 use PinterestAds\ApiRequest;
 use PinterestAds\Enum\AbstractEnum;
@@ -13,7 +11,7 @@ use PinterestAds\TypeChecker;
 class PinPromotion extends AbstractCrudObject
 {
     public function endpoint(){
-        return "pin_promotions";
+        return "ads";
     }
 
     public static function getFieldsEnum(): AbstractEnum
@@ -29,9 +27,9 @@ class PinPromotion extends AbstractCrudObject
 
         $request = new ApiRequest(
             $this->api,
-            $this->data['id'],
+            $this->data['advertiser_id'],
             RequestInterface::METHOD_GET,
-            '/pin_promotions/'.$this->data['id'],
+            '/ads/'.$this->data['advertiser_id'],
             new PinPromotion(),
             'NODE',
             PinPromotion::getFieldsEnum()->values(),

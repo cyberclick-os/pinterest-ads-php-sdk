@@ -49,7 +49,7 @@ class Session implements SessionInterface
         if ($this->appSecretProof() !== null) {
             return array(
                 'access_token' => $this->accessToken(),
-                'appsecret_proof' => $this->appSecretProof(),
+                'app_secret_proof' => $this->appSecretProof(),
             );
         } else {
             return array(

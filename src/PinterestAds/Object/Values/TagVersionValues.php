@@ -8,4 +8,5 @@ class TagVersionValues extends AbstractEnum
 {
     const V2 = '2';
     const V3 = '3';
+    const V4 = '4';
 }
