@@ -60,7 +60,7 @@ class Cursor implements Iterator, Countable, arrayaccess {
     Api $api = null) {
     $this->response = $response;
     $this->objectPrototype = $object_prototype;
-    $this->api = $api !== null ? $api : Api::instance();
+    $this->api = $api ?? Api::instance();
     $this->appendResponse($response);
   }
 

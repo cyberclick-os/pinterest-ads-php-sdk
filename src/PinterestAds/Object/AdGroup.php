@@ -31,7 +31,7 @@ class AdGroup extends AbstractArchivableCrudObject
             $this->api,
             $this->data['id'],
             RequestInterface::METHOD_GET,
-            '/ad_groups/'.$this->data['id'],
+            '/advertisers/'.$this->data['advertiser_id'].'ad_groups/'.$this->data['id'],
             new AdGroup(),
             'NODE',
             AdGroup::getFieldsEnum()->values(),
@@ -56,9 +56,9 @@ class AdGroup extends AbstractArchivableCrudObject
 
         $request = new ApiRequest(
             $this->api,
-            $this->data['id'],
+            $this->data['advertiser_id'],
             RequestInterface::METHOD_GET,
-            '/ad_groups/'.$this->data['id'].'/pin_promotions',
+            '/advertisers/'. $this->data['advertiser_id'].'ad_groups/'.$this->data['id'],
             new PinPromotion(),
             'EDGE',
             PinPromotion::getFieldsEnum()->values(),

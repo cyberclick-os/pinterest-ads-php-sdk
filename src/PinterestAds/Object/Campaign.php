@@ -52,9 +52,9 @@ class Campaign extends AbstractArchivableCrudObject
 
         $request = new ApiRequest(
             $this->api,
-            $this->data['id'],
+            $this->data['advertiser_id'],
             RequestInterface::METHOD_GET,
-            '/campaigns/'.$this->data['id'].'/ad_groups',
+            '/advertisers/'.$this->data['advertiser_id'].'/campaigns',
             new AdGroup(),
             'EDGE',
             AdGroup::getFieldsEnum()->values(),

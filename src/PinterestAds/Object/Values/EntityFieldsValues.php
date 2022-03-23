@@ -13,8 +13,8 @@ class EntityFieldsValues extends AbstractEnum
     const CAMPAIGN_MANAGED_STATUS = 'CAMPAIGN_MANAGED_STATUS';
     const CAMPAIGN_NAME = 'CAMPAIGN_NAME';
     const CAMPAIGN_STATUS = 'CAMPAIGN_STATUS';
-    const PIN_PROMOTION_ID = 'PIN_PROMOTION_ID';
-    const PIN_PROMOTION_NAME = 'PIN_PROMOTION_NAME';
-    const PIN_PROMOTION_STATUS = 'PIN_PROMOTION_STATUS';
+    const AD_ID = 'AD_ID';
+    const AD_NAME = 'AD_NAME';
+    const AD_STATUS = 'AD_STATUS';
     const PRODUCT_GROUP_ID = 'PRODUCT_GROUP_ID';
 }
