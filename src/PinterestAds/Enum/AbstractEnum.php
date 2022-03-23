@@ -15,11 +15,11 @@ abstract class AbstractEnum implements EnumInstanceInterface {
   protected static array $instances = array();
 
   static function className(): string {
-    return get_called_class();
+    return static::class;
   }
 
   public static function instance(): AbstractEnum {
-    $fqn = get_called_class();
+    $fqn = static::class;
     if (!array_key_exists($fqn, static::$instances)) {
       static::$instances[$fqn] = new static();
     }
@@ -29,7 +29,7 @@ abstract class AbstractEnum implements EnumInstanceInterface {
 
   public function arrayCopy(): array {
     if ($this->map === null) {
-      $this->map = (new ReflectionClass(get_called_class()))
+      $this->map = (new ReflectionClass(static::class))
         ->getConstants();
     }
 

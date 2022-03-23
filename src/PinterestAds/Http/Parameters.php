@@ -13,7 +13,10 @@ class Parameters extends ArrayObject
     }
 
     protected function exportNonScalar($value): string {
-        return json_encode($value);
+        try {
+            return json_encode($value, JSON_THROW_ON_ERROR);
+        } catch (\JsonException $e) {
+        }
     }
 
     public function export(): array {

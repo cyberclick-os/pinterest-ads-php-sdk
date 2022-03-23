@@ -1,8 +1,6 @@
 <?php
 
-
 namespace PinterestAds\Object;
-
 
 use PinterestAds\ApiRequest;
 use PinterestAds\Enum\AbstractEnum;

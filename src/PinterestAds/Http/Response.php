@@ -59,7 +59,10 @@ class Response implements ResponseInterface
     public function content(): ?array
     {
         if ($this->content === null) {
-            $this->content = json_decode($this->body(), true);
+            try {
+                $this->content = json_decode($this->body(), true, 512, JSON_THROW_ON_ERROR);
+            } catch (\JsonException $e) {
+            }
         }
 
         return $this->content;
